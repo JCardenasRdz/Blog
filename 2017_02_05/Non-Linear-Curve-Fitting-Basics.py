@@ -8,10 +8,10 @@
 # 3. Perform curve fitting
 # 4. Compare results
 
-# modules 
+# modules
 import numpy as np
 import matplotlib.pyplot as plt
-from   scipy import optimize 
+from   scipy import optimize
 # 1. Simulate some data
 # In the real worls we would collect some data, but we can use simulated data
 # to make sure that our fitting routine works and recovers the parameters used
@@ -62,7 +62,7 @@ x0 = [1, 1]
 lb = [0,0]
 ub = [2,2]
 
-# estimate parameters in exp_decay 
+# estimate parameters in exp_decay
 OptimizeResult  = optimize.least_squares(residuals,  x0, bounds = (0,2),
                                           args   = ( xdata, y_data_with_noise,exp_decay) )
 parameters_estimated = OptimizeResult.x
@@ -80,4 +80,3 @@ plt.legend(('Data With noise','Real Data','Predicted Data'))
 # How good are the parameters I estimated?
 print( 'Predicted: ' + str( parameters_estimated))
 print( 'Expected : ' + str( parameters_used))
-

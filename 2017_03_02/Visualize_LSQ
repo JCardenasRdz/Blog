@@ -1,0 +1,51 @@
+'''
+Least square curve fitting is one of the cornerstones of parametric data analysis. When I first learned about it, I had a very difficult time visualizing the process of minimizing the sum of the squares of the residuals.
+I would like to share some python code to visualize this minimization. The function is an exponential recovery of the form S = a * exp(-x/b), and the goal is to find the predicted a and b that minimize the square of the residuals.
+Along the way I calculated several values of a and b that are way off and plotted the sum of the square of the residuals as surface plot.
+'''
+# define functions
+import numpy as np
+# Exponential Recovery
+xdata = np.linspace(0,10,20) # seconds
+exp_decay = lambda p0, p1: p0 * np.exp(-xdata/p1)
+
+# Sum of squared of the residuals
+sum_sqr_res = lambda y_observed, y_predicted: np.sum( (y_observed-y_predicted)**2)
+
+#simulate data for an "observed signal"
+a_real = 2
+b_real = 1.5
+signal_observed= exp_decay(a_real,b_real)
+
+
+# Estimate sum_sqr_res for a range of predicted a and b
+# ranges for tes
+a_test = np.linspace(0,4,40) 
+b_test = np.linspace(0,3.0,40) 
+
+# allocate output
+n_ = len(a_test)
+lsq = np.zeros( (n_,n_) )
+
+for i in range(n_):
+    for j in range(n_):
+        S_predicted = exp_decay( a_test[i],b_test[j])
+        lsq[i,j] = sum_sqr_res(S_predicted,signal_observed)
+        
+
+
+import plotly.plotly as py
+import plotly.graph_objs as go
+
+data = [   
+    go.Surface(z=lsq) 
+       ]
+       
+layout = go.Layout(
+    title='Non Linear Least Square Curve Fitting',
+    autosize=True)
+    
+fig = go.Figure(data=data, layout=layout)
+py.iplot(fig, filename='Non Linear Least Square Curve Fitting')
+
+
